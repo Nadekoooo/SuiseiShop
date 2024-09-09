@@ -14,29 +14,38 @@
 
                     Client (Browser)
                             |
+                            |
     1. Client membuat HTTP request (misal, membuka URL)
+                            |
                             v
                     Django URLs (urls.py)
                             |
-    2. Django memeriksa `urls.py` untuk mencocokkan URL request dengan pattern / aplikasi yang ada
-        contoh urls.py :
+                            |
+    2. Django memeriksa `urls.py` untuk mencocokkan URL request 
+            dengan pattern / aplikasi yang ada
+                    contoh urls.py :
 
-            "app_name = 'main'
+                    "app_name = 'main'
 
-            urlpatterns = [
-                path('', views.show_att)
-            ]"
-
-        pada contoh ini apabila user hanya membuka link awal (tanpa /"***" lain) 
-        maka fungsi show_att akan ter trigger
+                    urlpatterns = [
+                        path('', views.show_att)
+                    ]"
+                            |
+                            |
+        pada contoh ini apabila user hanya membuka link 
+        awal (tanpa /"***" lain) maka fungsi show_att akan ter trigger
+                            |
+                            |
                             v
                 Django Views (views.py)
+                            |
                             |
     3. `views.py` menerima request dan memberikan response pada client 
        tergantung dari penggunaan fungsi yang telah ditentukan sesuai request yang masuk
        pada kasus ini views.py akan menyediakan fungsi show_att pada user:
-       contoh views.py :
                             |
+                            |
+       contoh views.py :
             def show_att(request):
             att = {
                 'nama_apk' : 'Suisei Shop',
@@ -45,31 +54,40 @@
             }
             return render(request, 'att.html', att)
                             |
+                            |
         fungsi ini akan menerima request dan memberikan render berupa httpresponse dengan html
                             |   
                             v
                 Django Models (models.py)
                             |
-    4. Jika perlu, `views.py` mengambil/memodifikasi data dari/ke database menggunakan `models.py`
-    contoh models.py:
                             |
+    4. Jika perlu, `views.py` mengambil/memodifikasi data dari/ke database menggunakan `models.py`
+                            |
+                            |
+    contoh models.py:
             class ProductEntry(models.Model):
                 name = models.CharField(max_length=255)
                 price = models.IntegerField()
                 stock = models.IntegerField()
                 description = models.TextField()
                 category = models.TextField()
+                            |
                             v
                 Django Templates (HTML)
                             |
+                            |
     5. Data dari view atau model di-passing ke template HTML untuk dirender
+                            |
                             v
                         Response
                             |
+                            |
     6. Django mengirimkan HTML yang telah dirender sebagai HTTP response
+                            |
                             v
                     Client (Browser)
                             |
+                            v
     7. Client menerima dan menampilkan hasil response
 
 <h2>3. Kegunaan git dalam pengembangan perangkat lunak ialah </h2>
