@@ -55,7 +55,8 @@
             return render(request, 'att.html', att)
                             |
                             |
-        fungsi ini akan menerima request dan memberikan render berupa httpresponse dengan html
+        fungsi ini akan menerima request dan memberikan render 
+            berupa httpresponse dengan html
                             |   
                             v
                 Django Models (models.py)
@@ -64,7 +65,7 @@
     4. Jika perlu, `views.py` mengambil/memodifikasi data dari/ke database menggunakan `models.py`
                             |
                             |
-    contoh models.py:
+            contoh models.py:
             class ProductEntry(models.Model):
                 name = models.CharField(max_length=255)
                 price = models.IntegerField()
