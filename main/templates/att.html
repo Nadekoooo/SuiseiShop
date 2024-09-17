@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base.html' %}
+{% block content %}
     <title>Suisei Shop</title>
     <style>
         body {
@@ -24,16 +21,83 @@
         .info {
             margin-top: 20px;
             font-size: 18px;
+        }button {
+            background-color: #7AA9Ed;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #7AA9Ed;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        table caption {
+            font-size: 1.5em;
+            margin: 10px 0;
         }
     </style>
-</head>
-<body>
     <div class="container">
-        <h1>Welcome to {{nama_apk}}</h1>
+        <h1>Welcome to SuiseiShop</h1>
         <div class="info">
             <p><strong>Nama:</strong> {{nama}}</p>
             <p><strong>Kelas:</strong> {{kelas}}</p>
         </div>
+    {% if not item %}
+    <p>Belum ada data barang pada SuiseiShop.</p>
+    {% else %}
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Desciption</th>
+            <th>Category</th>
+        </tr>
+
+        {% comment %} Berikut cara memperlihatkan data mood di bawah baris ini 
+        {% endcomment %} 
+        {% for att in item %}
+        <tr>
+            <td>{{att.name}}</td>
+            <td>{{att.price}}</td>
+            <td>{{att.stock}}</td>
+            <td>{{att.description}}</td>
+            <td>{{att.category}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <br />
+
+    <a href="{% url 'main:create_show_form' %}">
+    <button>Add New Item</button>
+    </a>
     </div>
-</body>
-</html>
+
+    
+{% endblock content %}
