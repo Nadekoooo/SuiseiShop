@@ -99,3 +99,28 @@ Hal ini berkaitan dengan konsep MVT. Konsep MVT ini sangat berkaitan dengan fram
 
 <h2>5. Mengapa model pada django disebut dengan ORM?</h2>
 ORM(Object Relational Mapping) merupakan konsep yang berfungsi untuk menghubungkan objek python dengan tabel yang ada dalam database. Dengan ORM, pengembang software mammpu mengeksekusi operasa secara langsung pada database tanpa menulis ataupun mengakses SQL. Implementasi model pada django juga mewakili setiap jenis atribut tabel di database seperti charfield, integerfield, dll yang dalam kata lain mampu mempermudah interaksi dengan database dan mendukung jenis jenisnya secara abstrak.
+
+<h1>Tugas 3</h1>
+
+<h2>1. Mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?</h2>
+Data delivery diperlukan dalam pengimplementasian platform karena memungkinkan pertukaran informasi antara berbagai sistem atau komponen dalam arsitektur yang terdistribusi. Dengan data delivery, platform dapat mengirim dan menerima data secara efisien, baik antar server, klien, atau antar aplikasi. Hal ini sangat penting untuk memastikan integritas, efektivitas akses data. Tanpa adanya data delivery yang baik, mungkin aplikasi tidak mampu berfungsi dengan baik, terutama dalam hal real-time processing, dan sinkronisasi data.
+
+<h2>2. Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?</h2>
+Menurut saya, JSON lebih baik dari XML dalam lingkup keterbacaan. Meskipun kedua format ini mendukung penyampaian informasi yang baik, JSON dalam hal ini dapat lebih mudah dibaca dengan penggunaan "label" : value apabila dibandingkan dengan XML yang menggunakan field dan bahasa penyampaian yang lebih teknis. Secara langsung JSON juga mempercepat proses distribusi karena kesederhanaannya dan meningkatkan performa pada database besar.
+
+<h2>3. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?</h2>
+Method isvalid yang digunakan pada fungsi di views merupakan cara bagaimana django memvalidasi format data yang dimasukan ke dalam form/model. Dengan menggunakan is_valid(), django akan mengecek apakah input user sesuai dengan type yang ditentukan dengan yang telah di define pada spesifikasi database model. Hal ini penting untuk diterapkan karena format yang salah pada input data akan mengganggu proses distribusi data dan berpotensi untuk memberikan threat lebih lanjut pada sistem yang tidak di inginkan.
+
+<h2>4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?</h2>
+csrf_token merupakan token unik yang di generalize oleh Django untuk melindungi aplikasi dari CSRF attack (Cross Site Request Forgery). Serangan ini terjadi ketika penyerang membuat permintaan yang terlihat sah dari pengguna yang telah terautentikasi pada aplikasi, hal ini terjadi melalui pengiriman formulir atau permintaan POST tanpa sepengetahuan pengguna.
+
+Jika kita tidak menambahkan csrf_token pada form Django, aplikasi kita akan rentan terhadap serangan ini. Penyerang dapat memanfaatkan sesi pengguna yang valid untuk menjalankan aksi yang tidak diinginkan, seperti mengubah data pengguna, melakukan pembelian tanpa izin, atau menghapus data.
+
+<h2>5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).</h2>
+Saya mengimplementasikan checklist dengan menambahkan beberapa hal pada aplikasi saya. Pertama-tama saya membuat base.html untuk mempermudah setup html dan menambahkan block untuk template lanjutannya. Setelah melakukan hal tersebut saya membuat html untuk menyesuaikan pembuatan form dan mengatur tinggi serta lebar tabel agar lebih estetik. 
+
+Setelah sedikit adjust pada templates, saya mulai membuat forms.py yang berisikan class yang berbasis pada model utama, saya mengintegrasikan fields sesuai dengan kebutuhan input user. Setelah ini, saya juga meng-update models.py dan menambahkan id pada setiap submisi data untuk mempermudah identifikasi data.
+
+Kemudian untuk melakukan routing, saya menambahkan fungsi membuat form baru pada views.py yang juga menerima request user dan mengembalikan Https Response berupa render sesuai dengan html dan urls yang sudah saya sesuaikan kembali.
+
+Terakhir saya menambahkan fungsi untuk menampilkan data dalam format JSON atau XML, baik dengan id atau tanpa id untuk menampilkan data.
