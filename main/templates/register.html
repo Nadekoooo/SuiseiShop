@@ -100,7 +100,6 @@
   <form method="POST">
     {% csrf_token %}
 
-    <!-- Username Field -->
     <label for="id_username">Username :</label>
     {{ form.username }}
     {% if form.username.errors %}
@@ -112,7 +111,6 @@
     {% endif %}
     <div class="helptext">{{ form.username.help_text }}</div>
 
-    <!-- Password Field -->
     <label for="id_password1">Password :</label>
     {{ form.password1 }}
     {% if form.password1.errors %}
@@ -124,7 +122,6 @@
     {% endif %}
     <div class="helptext">{{ form.password1.help_text }}</div>
 
-    <!-- Password Confirmation Field -->
     <label for="id_password2">Password confirmation :</label>
     {{ form.password2 }}
     {% if form.password2.errors %}
@@ -139,7 +136,6 @@
     <input type="submit" name="submit" value="Register" />
   </form>
 
-  <!-- Messages or Errors -->
   {% if messages %}
   <ul>
     {% for message in messages %}
