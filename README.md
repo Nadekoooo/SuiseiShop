@@ -111,7 +111,24 @@ Menurut saya, JSON lebih baik dari XML dalam lingkup keterbacaan. Meskipun kedua
 <h2>3. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?</h2>
 Method isvalid yang digunakan pada fungsi di views merupakan cara bagaimana django memvalidasi format data yang dimasukan ke dalam form/model. Dengan menggunakan is_valid(), django akan mengecek apakah input user sesuai dengan type yang ditentukan dengan yang telah di define pada spesifikasi database model. Hal ini penting untuk diterapkan karena format yang salah pada input data akan mengganggu proses distribusi data dan berpotensi untuk memberikan threat lebih lanjut pada sistem yang tidak di inginkan.
 
+Bentuknya seperti berikut:
+
+```bash
+    def create_show_form(request):
+    form = SuiseiMainForm(request.POST or None)
+    
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return redirect('main:show_att')
+    
+    context = {'form': form}
+    return render(request, "create_show_form.html", context)
+```
+
 <h2>4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?</h2>
+
+`% csrf_token %`
+
 csrf_token merupakan token unik yang di generalize oleh Django untuk melindungi aplikasi dari CSRF attack (Cross Site Request Forgery). Serangan ini terjadi ketika penyerang membuat permintaan yang terlihat sah dari pengguna yang telah terautentikasi pada aplikasi, hal ini terjadi melalui pengiriman formulir atau permintaan POST tanpa sepengetahuan pengguna.
 
 Jika kita tidak menambahkan csrf_token pada form Django, aplikasi kita akan rentan terhadap serangan ini. Penyerang dapat memanfaatkan sesi pengguna yang valid untuk menjalankan aksi yang tidak diinginkan, seperti mengubah data pengguna, melakukan pembelian tanpa izin, atau menghapus data.
@@ -119,8 +136,43 @@ Jika kita tidak menambahkan csrf_token pada form Django, aplikasi kita akan rent
 <h2>5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).</h2>
 Saya mengimplementasikan checklist dengan menambahkan beberapa hal pada aplikasi saya. Pertama-tama saya membuat base.html untuk mempermudah setup html dan menambahkan block untuk template lanjutannya. Setelah melakukan hal tersebut saya membuat html untuk menyesuaikan pembuatan form dan mengatur tinggi serta lebar tabel agar lebih estetik. 
 
-Setelah sedikit adjust pada templates, saya mulai membuat forms.py yang berisikan class yang berbasis pada model utama, saya mengintegrasikan fields sesuai dengan kebutuhan input user. Setelah ini, saya juga meng-update models.py dan menambahkan id pada setiap submisi data untuk mempermudah identifikasi data.
+`{% block meta %} {% endblock meta %}`
 
+```bash
+    table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        td {
+            padding: 12px;
+            vertical-align: top;
+        }
+        td:first-child {
+            text-align: right;
+            font-weight: bold;
+            width: 30%;
+            padding-right: 20px;
+        }
+```
+
+Setelah sedikit adjust pada templates, saya mulai membuat forms.py yang berisikan class yang berbasis pada model utama, saya mengintegrasikan fields sesuai dengan kebutuhan input user. Setelah ini, saya juga meng-update models.py dan menambahkan id pada setiap submisi data untuk mempermudah identifikasi data.
+```bash
+    class SuiseiMainForm(ModelForm):
+        class Meta:
+            model = ProductEntry
+            fields = ["name", "price", "stock", "description", "category"]
+```
 Kemudian untuk melakukan routing, saya menambahkan fungsi membuat form baru pada views.py yang juga menerima request user dan mengembalikan Https Response berupa render sesuai dengan html dan urls yang sudah saya sesuaikan kembali.
 
+Contoh return value:
+
+`return render(request, "create_show_form.html", context)`
+
 Terakhir saya menambahkan fungsi untuk menampilkan data dalam format JSON atau XML, baik dengan id atau tanpa id untuk menampilkan data.
+```bash
+    path('xml/', views.show_xml, name='show_xml'),
+    path('json/', views.show_json, name='show_json'),
+    path('xml/<str:id>/', views.show_xml_by_id, name='show_xml_by_id'),
+    path('json/<str:id>/', views.show_json_by_id, name='show_json_by_id')
+```
