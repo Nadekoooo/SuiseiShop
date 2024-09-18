@@ -1,4 +1,6 @@
 
+<h1> Tugas 2</h1>
+
 <h2> 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). </h2>
    Jawab :
    1. Saya membuat folder dengan virtual environment baru agar tidak mengganggu versi library di global pada local saya.
@@ -176,3 +178,11 @@ Terakhir saya menambahkan fungsi untuk menampilkan data dalam format JSON atau X
     path('xml/<str:id>/', views.show_xml_by_id, name='show_xml_by_id'),
     path('json/<str:id>/', views.show_json_by_id, name='show_json_by_id')
 ```
+
+![WhatsApp Image 2024-09-18 at 10 05 14_615cda77](https://github.com/user-attachments/assets/428d18cd-588b-42b2-94b1-84598ae35120)
+
+![WhatsApp Image 2024-09-18 at 10 05 40_c5a367b6](https://github.com/user-attachments/assets/39b0a52b-768e-41ad-892b-fc2a2d7e8ddc)
+
+![WhatsApp Image 2024-09-18 at 10 06 06_241e3d2b](https://github.com/user-attachments/assets/d954d0fd-e5ac-4b91-8041-cba30cd352be)
+
+![WhatsApp Image 2024-09-18 at 10 06 52_5c9e580d](https://github.com/user-attachments/assets/d400296c-6467-4120-9f13-daed54db5c17)
