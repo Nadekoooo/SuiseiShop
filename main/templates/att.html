@@ -1,103 +1,147 @@
 {% extends 'base.html' %}
 {% block content %}
-    <title>Suisei Shop</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        h1 {
-            text-align: center;
-        }
-        .info {
-            margin-top: 20px;
-            font-size: 18px;
-        }button {
-            background-color: #7AA9Ed;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+<title>Suisei Shop</title>
+<style>
+    body {
+        font-family: Helvetica, sans-serif;
+        background-color: #4663ac;
+        padding: 20px;
+        height: 100vh; /* Full viewport height */
+        display: flex;
+        justify-content: center; /* Centers horizontally */
+        align-items: center; /* Centers vertically */
+        margin: 0; /* Removes default margin */
+    }
+    
+    .container {
+        background-color: #c1d8f0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 800px; /* Width of the container */
+        width: 100%; /* Ensures it doesn't overflow */
+    }
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    h1 {
+        text-align: center;
+        font-size: 80px;
+        text-transform: uppercase;
+        font-weight: 900;
+        letter-spacing: 20px;
+        margin: 20px 0;
+        background: url(https://lastfm.freetls.fastly.net/i/u/ar0/9878ce671f84d6f2defcc221c81b2b49.jpg) 50% 50%;
+        background-size: cover;
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+    }
 
-        th {
-            background-color: #7AA9Ed;
-            color: white;
-        }
+    .info {
+        margin-top: 20px;
+        font-size: 18px;
+    }
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
+    .info strong {
+        color: #333;
+    }
 
-        tr:hover {
-            background-color: #ddd;
-        }
+    button {
+        background-color: #7AA9Ed;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+        transition: background-color 0.3s ease;
+    }
 
-        table caption {
-            font-size: 1.5em;
-            margin: 10px 0;
-        }
-    </style>
-    <div class="container">
-        <h1>Welcome to SuiseiShop</h1>
-        <div class="info">
-            <p><strong>Nama:</strong> {{nama}}</p>
-            <p><strong>Kelas:</strong> {{kelas}}</p>
-        </div>
+    button:hover {
+        background-color: #5691d8;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #7AA9Ed;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+
+    table caption {
+        font-size: 1.5em;
+        margin: 10px 0;
+    }
+
+    .add-item {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .add-item a {
+        text-decoration: none;
+    }
+</style>
+
+<div class="container">
+    <h1>SuiseiShop</h1>
+
+    {% comment %} <div class="info">
+        <p><strong>Nama:</strong> {{nama}}</p>
+        <p><strong>Kelas:</strong> {{kelas}}</p>
+    </div> {% endcomment %}
+
     {% if not item %}
-    <p>Belum ada data barang pada SuiseiShop.</p>
+        <p>Belum ada data barang pada SuiseiShop.</p>
     {% else %}
     <table>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Desciption</th>
-            <th>Category</th>
-        </tr>
-
-        {% comment %} Berikut cara memperlihatkan data mood di bawah baris ini 
-        {% endcomment %} 
-        {% for att in item %}
-        <tr>
-            <td>{{att.name}}</td>
-            <td>{{att.price}}</td>
-            <td>{{att.stock}}</td>
-            <td>{{att.description}}</td>
-            <td>{{att.category}}</td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Description</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for att in item %}
+            <tr>
+                <td>{{att.name}}</td>
+                <td>{{att.price}}</td>
+                <td>{{att.stock}}</td>
+                <td>{{att.description}}</td>
+                <td>{{att.category}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
     {% endif %}
-    <br />
 
-    <a href="{% url 'main:create_show_form' %}">
-    <button>Add New Item</button>
-    </a>
+    <div class="add-item">
+        <a href="{% url 'main:create_show_form' %}">
+            <button>Add New Item</button>
+        </a>
     </div>
+</div>
 
-    
 {% endblock content %}
