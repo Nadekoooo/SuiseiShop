@@ -4,17 +4,20 @@
 <style>
     body {
         font-family: Helvetica, sans-serif;
-        background-color: #4663ac;
+        background-color: #0f2573;
         padding: 20px;
         height: 100vh; /* Full viewport height */
         display: flex;
         justify-content: center; /* Centers horizontally */
         align-items: center; /* Centers vertically */
         margin: 0; /* Removes default margin */
+        background: url(https://static.vecteezy.com/system/resources/previews/002/617/560/non_2x/modern-pattern-of-planet-star-comet-with-different-rockets-universe-line-drawings-cosmos-vector.jpg) 60% 40%;
+        background-size: cover;
     }
     
     .container {
-        background-color: #c1d8f0;
+        background-color: #e6edf5
+        ;
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -126,6 +129,15 @@
     .add-item a {
         text-decoration: none;
     }
+    .par {
+        margin: 20px 0;
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+        background-color: #f8f9fa; 
+        padding: 10px;
+        text-align: center; 
+    }
 </style>
 
 <div class="container">
@@ -138,7 +150,9 @@
     </div> {% endcomment %}
 
     {% if not item %}
+    <div class="par">
         <p>Belum ada data barang pada SuiseiShop.</p>
+    </div>
     {% else %}
     <table>
         <thead>
@@ -168,6 +182,10 @@
         <a href="{% url 'main:create_show_form' %}">
             <button>Add New Item</button>
         </a>
+        <a href="{% url 'main:logout' %}">
+            <button>Logout</button>
+        </a>
+        <h5>Sesi terakhir login: {{ last_login }}</h5>
     </div>
 </div>
 

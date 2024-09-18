@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Register</title>
+<style>
+    body {
+        font-family: Helvetica, sans-serif;
+        background-color: #4663ac;
+        padding: 20px;
+        height: 100vh; /* Full viewport height */
+        display: flex;
+        justify-content: center; /* Centers horizontally */
+        align-items: center; /* Centers vertically */
+        margin: 0; /* Removes default margin */
+        background: url(https://static.vecteezy.com/system/resources/previews/002/617/560/non_2x/modern-pattern-of-planet-star-comet-with-different-rockets-universe-line-drawings-cosmos-vector.jpg) 60% 40%;
+        background-size: cover;
+    }
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px; /* Adjusts the form width */
+        width: 100%; /* Make the container stretch to the full width */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centers the contents horizontally */
+        justify-content: center; /* Centers the contents vertically */
+    }
+    h1 {
+        text-align: center;
+        font-size: 30px;
+        text-transform: uppercase;
+        font-weight: 900;
+        letter-spacing: 10px;
+        margin: 20px 0;
+        color: #4663ac;
+    }
+    form {
+        width: 100%; /* Ensure the form takes up the full width of the container */
+    }
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+        text-align: left;
+        width: 100%;
+        padding-left: 5px;
+        color: #4663ac;
+    }
+    input[type="text"], input[type="password"], input[type="email"], input[type="number"], textarea, select {
+        width: 100%; /* Ensures full width of the input */
+        max-width: 350px; /* Limits the input width */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        margin-bottom: 15px; /* Adds spacing between input fields */
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    input[type="submit"] {
+        background-color: #7AA9Ed;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%; /* Makes the button expand the full width */
+        max-width: 350px;
+        margin: 0 auto; /* Centers the button horizontally */
+        display: block;
+    }
+    input[type="submit"]:hover {
+        background-color: #5f87c7;
+    }
+    .helptext {
+        font-size: 12px;
+        color: #777;
+        margin-bottom: 10px;
+        display: block;
+        padding-left: 15px;
+        text-align: left;
+    }
+    .errorlist {
+        color: red;
+        font-size: 12px;
+        padding-left: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+{% endblock meta %}
+
+{% block content %}
+<div class="container">
+  <h1>Register</h1>
+
+  <form method="POST">
+    {% csrf_token %}
+    
+    <label for="id_username">Username :</label>
+    {{ form.username }}
+    <div class="helptext">{{ form.username.help_text }}</div>
+    
+    <label for="id_password1">Password :</label>
+    {{ form.password1 }}
+    <div class="helptext">{{ form.password1.help_text }}</div>
+    
+    <label for="id_password2">Password confirmation :</label>
+    {{ form.password2 }}
+    <div class="helptext">{{ form.password2.help_text }}</div>
+
+    <input type="submit" name="submit" value="Register" />
+  </form>
+
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+
+{% endblock content %}
