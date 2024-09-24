@@ -186,3 +186,293 @@ Terakhir saya menambahkan fungsi untuk menampilkan data dalam format JSON atau X
 ![WhatsApp Image 2024-09-18 at 10 06 06_241e3d2b](https://github.com/user-attachments/assets/d954d0fd-e5ac-4b91-8041-cba30cd352be)
 
 ![WhatsApp Image 2024-09-18 at 10 06 52_5c9e580d](https://github.com/user-attachments/assets/d400296c-6467-4120-9f13-daed54db5c17)
+
+
+<h1>Tugas 4</h1>
+
+<h2>1. Apa perbedaan antara `HttpResponseRedirect()` dan redirect()</h2>
+
+```bash
+    HttpResponseRedirect()
+```
+Ini merupakan kelas django yang secara manual bisa membuat response untuk melakukan pengalihan (redirect) ke URL lain.
+
+Kelas ini dapat menerima satu parameter yaitu URL dengan contoh:
+ ```bash
+    HttpResponseRedirect('/sebuah-url/')
+ ```
+
+Sementara untuk `redirect()` merupakan shortcut django yang lebih sederhana untuk membuat redirect.
+
+Fungsi ini lebih fleksibel dibandingkan dengan `HttpResponseRedirect` karena dapat menerima berbagai parameter fungsi, seperti URL nama fungsi view ataupun objek lain.
+
+Pada akhirnya `redirect()` ini juga menggunakan `HttpResponseRedirect` di proses latar belakangnya, namun fleksibilitas ini yang memberikan perbedaan.
+
+<h2>2. Jelaskan cara kerja penghubungan model Product dengan User</h2>
+
+Dalam menghubungkan model product dan user pertama tama kita harus melihat `models.py`. Pada bagian models ini kita harus menyambungkan satu key ke beberapa product yang ada pada model.
+
+```bash
+    class ProductEntry(models.Model):
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        user = models.ForeignKey(User, on_delete=models.CASCADE)
+        name = models.CharField(max_length=255)
+        price = models.IntegerField()
+        stock = models.IntegerField()
+        description = models.TextField()
+        category = models.TextField()
+    
+```
+
+
+`ForeignKey(User, on_delete=models.CASCADE)` menghubungkan setiap produk ke satu user. Relasi ini membuat satu pengguna dapat memiliki banyak produk (one-to-many relationship).
+
+Di sini parameter models.CASCADE memberikan korelasi kuat dengan data dan user, fungsi ini memastikan bahwa user dihapus produk yang terhubung dengan user tersebut juga terhapus.
+
+<h2>3. Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.</h2>
+
+<h5>Authentication (Autentikasi):</h5>
+Proses ini bertujuan untuk memverifikasi identitas pengguna. Dalam konteks ini (saat login), autentikasi terjadi saat pengguna memberikan data login/kredensial user (seperti username dan password) untuk membuktikan bahwa mereka adalah siapa yang mereka klaim. Jika kredensial tersebut valid, pengguna dianggap "terautentikasi" dan dapat melanjutkan ke sistem.
+
+<h5>Authorization (Otorisasi):</h5>
+Setelah pengguna terautentikasi, otorisasi menentukan apa yang diizinkan untuk dilakukan pengguna tersebut. Otorisasi terkait dengan perizinan (permissions), seperti akses ke halaman tertentu atau kemampuan untuk melakukan tindakan tertentu (misalnya mengedit atau menghapus data menggunakan request PATCH atau DELETE).
+
+<h5>Proses Login:</h5>
+Saat pengguna login, sistem pertama kali melakukan autentikasi untuk memastikan bahwa kredensial pengguna benar dan sah, apabila masih salah maka akan ada error dan pengguna tidak akan masuk. Setelah berhasil, sistem kemudian menggunakan otorisasi untuk memutuskan akses apa saja yang diberikan kepada pengguna tersebut berdasarkan peran (role) atau izin (permissions) yang telah ditetapkan pada aplikasi.
+
+<h5>Implementasinya di Django:</h5>
+Authentication: Django menyediakan modul autentikasi melalui django.`contrib.auth` . Django menggunakan middleware dan views khusus seperti LoginView untuk menangani proses login. Kredensial pengguna (username dan password) dicocokkan dengan data pengguna yang tersimpan dalam database. Pengguna yang terautentikasi kemudian disimpan dalam sesi (session), sehingga mereka tidak perlu login lagi dalam setiap permintaan (request).
+
+Authorization: Django menggunakan sistem permissions yang terkait dengan pengguna atau grup pengguna. Setiap pengguna dapat memiliki peran tertentu (seperti admin, editor, atau pengguna biasa), dan otorisasi dilakukan melalui decorator seperti `@login_required` dan `@permission_required`. Selain itu, Django juga menyediakan kontrol akses berbasis grup (group-based permissions) untuk mengatur hak akses pada level lebih tinggi.
+
+Contoh aplikasi :
+
+```bash
+    @login_required(login_url='/login')
+    def show_att(request):
+        item = ProductEntry.objects.filter(user=request.user)
+        
+        att = {
+            'name': request.user.username,
+            'nama_apk' : 'Suisei Shop',
+            'nama' : "Christian Yudistira Hermawan",
+            'kelas' : "PBP F",
+            'item' : item,
+            'last_login': request.COOKIES['last_login'],
+        }
+        return render(request, 'att.html', att)
+```
+
+Untuk fungsi di views ini dibutuhkan login untuk menggunakan show_att. Ketika url default memberikan path `path('', views.show_att, name = "show_att"),`, maka akan me redirect ke /login bagi pengguna yang belum login, namun apabila pengguna sudah login maka redirect ke login tidak terjadi.
+
+
+<h2>4. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?</h2>
+
+Django mengingat pengguna yang telah login dengan menggunakan sesi (session) dan cookies. Ketika pengguna berhasil login, Django menciptakan sesi untuk pengguna tersebut dan menyimpan informasi sesi di server, sementara sebuah cookie untuk mencatat sesi (session cookie) disimpan di sisi klien (browser). Cookie ini berisi ID unik yang mengacu pada sesi di server. Jadi singkatnya cookie menjadi sebuah identifier yang dipass dari browser pengguna.
+
+```bash
+    @login_required(login_url='/login')
+    def show_att(request):
+        item = ProductEntry.objects.filter(user=request.user)
+        
+        att = {
+            'name': request.user.username,
+            'nama_apk' : 'Suisei Shop',
+            'nama' : "Christian Yudistira Hermawan",
+            'kelas' : "PBP F",
+            'item' : item,
+            'last_login': request.COOKIES['last_login'],
+        }
+        return render(request, 'att.html', att)
+```
+
+Di sini ada penggunaan `'last_login': request.COOKIES['last_login']` yang meretrieve atribut cookies (last login) yang telah diaplikasikan ke dalam function pada `views.py`
+
+
+Sementara itu kegunaan lain dari cookies dapat dilihat berdasarkan definisinya sendiri, cookie adalah data kecil yang disimpan di browser pengguna. Data ini mampu memberikan informasi seperti:
+
+
+- Menyimpan Preferensi Pengguna: Misalnya, bahasa yang dipilih atau mode tampilan (gelap/terang) di situs web.
+- Pelacakan Pengguna (Tracking): Cookies bisa digunakan untuk melacak aktivitas pengguna di situs web, sering kali untuk tujuan analitik atau iklan.
+- Keranjang Belanja (Shopping Cart): Dalam e-commerce, cookies bisa digunakan untuk menyimpan barang-barang yang ditambahkan pengguna ke keranjang belanja meskipun belum login.
+- Token CSRF: Django juga menggunakan cookie untuk mengelola token CSRF (Cross-Site Request Forgery), guna melindungi dari serangan CSRF.
+
+Cookies sendiri dibagi menjadi 2, yaitu cookies yang dikonsiderasi sebagai cookies aman dan tidak aman
+
+Beberapa kriteria yang mungkin dikategorikan aman adalah sebagai berikut
+
+<h4>Cookies Aman:</h4>
+
+- Secure Flag: Jika cookie ditandai dengan Secure, cookie tersebut hanya akan dikirim melalui koneksi HTTPS yang terenkripsi, sehingga lebih aman dari penyadapan.
+- HttpOnly Flag: Cookie dengan HttpOnly flag tidak dapat diakses oleh JavaScript, sehingga mencegah risiko serangan Cross-Site Scripting (XSS), di mana script jahat mencoba mencuri informasi dari cookies.
+- SameSite Flag: Membatasi pengiriman cookies dalam konteks lintas situs, sehingga membantu mencegah serangan CSRF. Pengaturan ini memastikan cookies hanya dikirim dalam permintaan yang berasal dari domain yang sama.
+
+<h4>Cookies Tidak Aman:</h4>
+
+- Cookies Tanpa Enkripsi: Jika cookie dikirim melalui HTTP (bukan HTTPS), data cookie dapat disadap oleh pihak ketiga di jaringan (man-in-the-middle attack).
+- Cookies Tanpa HttpOnly: Cookies yang dapat diakses oleh JavaScript rentan terhadap serangan XSS, di mana kode jahat dapat mencuri data dari cookies.
+- Cookies dengan Data Sensitif: Cookies seharusnya tidak digunakan untuk menyimpan informasi sensitif seperti password atau data pribadi, karena cookies berada di sisi klien dan lebih mudah untuk disalahgunakan.
+
+<h2>5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).</h2>
+
+Pada Tugas 4 ini terdapat beberapa modifikasi yang berarti bagi aplikasi ini. Aplikasi ini mendapatkan fitur untuk login, verivikasi login, penggunaan cookie dan penentuan foreign key yang mengatur hubungan user dan isi dari aplikasi.
+
+Pertama - tama saya mencoba membuat model dengan mengintegrasikannya dengan user. Saya mengimport library ini
+
+`from django.contrib.auth.models import User`
+
+Library ini merupakan library autentikasi user yang merupakan bawaan dari django. Di sini saya menggunakan User sebagai foreign key pada model. Menurut teori basis data, foreign key merupakan primary key user (id) yang dipass ke dalam model dalam bentuk `user_id`. Karena id pada user merupakan primary key, maka user dapat dibedakan berdasarkan id tersebut atau dapat disebut user_id adalah unique value yang dipass ke dalam tabel pada model. Berikut merupakan implementasinya :
+
+```bash
+    from django.contrib.auth.models import User
+
+    class ProductEntry(models.Model):
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        user = models.ForeignKey(User, on_delete=models.CASCADE)
+        name = models.CharField(max_length=255)
+        price = models.IntegerField()
+        stock = models.IntegerField()
+        description = models.TextField()
+        category = models.TextField()
+```
+
+`on_delete=models.CASCADE` ini merupakan cara agara apabila sebuah user di delete dari database, maka data yang terhubung dengan id user tersebut akan ikut ter delete dari database.
+
+Untuk mengintergrasikan user ini ke fungsi, pada show_att/fungsi utama di aplikasi ini ditambahkan filter by user
+
+```bash
+    @login_required(login_url='/login')
+    def show_att(request):
+        item = ProductEntry.objects.filter(user=request.user)
+        
+        att = {
+            'name': request.user.username,
+            'nama_apk' : 'Suisei Shop',
+            'nama' : "Christian Yudistira Hermawan",
+            'kelas' : "PBP F",
+            'item' : item,
+            'last_login': request.COOKIES['last_login'],
+        }
+        return render(request, 'att.html', att)
+```
+
+pada `item` disini diterapkan hasil product entry yang sudah di integrasikan menginput data ke model dengan form
+
+```bash
+    def create_show_form(request):
+        form = SuiseiMainForm(request.POST or None)
+        
+        if form.is_valid() and request.method == "POST":
+            item_entry = form.save(commit=False)
+            item_entry.user = request.user
+            item_entry.save()
+            return redirect('main:show_att')
+        
+        context = {'form': form}
+        return render(request, "create_show_form.html", context)
+```
+Di fungsi ini form akan dibuat dan selalu dicek apakah form ini sudah berbentuk POST atau apakah sudah valid. Apabila form belum memenuhi keduanya atau salah satu dari kedua kondisi itu, form akan di render dan akan di direct ke html yang akan menampilkan form kembali. Bentuknya ialah seperti berikut:
+
+```bash
+    <form method="POST">
+            {% csrf_token %}
+            <table>
+                {{ form.as_table }}
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="Create Show Form" />
+                    </td>
+                </tr>
+            </table>
+    </form>
+```
+
+Apabila user mengklik tombol submit, maka form akan me direct ulang ke url yang sama (pada kasus ini ke url yang menuju create_show_form) dan fungsi akan mengecek data yang dikirim di parameter `request` pada fungsi dan kembali memeriksa form. Apabila submisi valid dan typenya sudah `POST` maka form akan dicoba disave
+
+```bash
+    item_entry = form.save(commit=False)
+    item_entry.user = request.user
+    item_entry.save()
+    return redirect('main:show_att')
+```
+Di sini form akan melakukan temporary save `commit = False` lalu menginput user menjadi foreign keynya baru disave permanen ke database model. Setelah berhasil maka akan kembali redirect ke halaman utama yang sudah menampilkan data terbaru.
+
+Terdapat perubahan juga pada fungsi `show_att` di dalam views.py. Terdapat pengunaan cookies di sini, penjelasan mengenai cookies sudah dijelaskan di nomor sebelumnya dan pengaplikasiannya adalah sebagai berikut :
+
+```bash
+    @login_required(login_url='/login')
+    def show_att(request):
+        item = ProductEntry.objects.filter(user=request.user)
+        
+        att = {
+            'name': request.user.username,
+            'nama_apk' : 'Suisei Shop',
+            'nama' : "Christian Yudistira Hermawan",
+            'kelas' : "PBP F",
+            'item' : item,
+            'last_login': request.COOKIES['last_login'],
+        }
+        return render(request, 'att.html', att)
+```
+
+Di sini last login merupakan pengunaan awal pada cookies yang selanjutnya akan digunakan pada fungsi `login` dan `register`
+
+```bash
+    <form method="POST" action="">
+        {% csrf_token %}
+        <label for="username">Username :</label>
+        <input type="text" id="username" name="username" required>
+        
+        <label for="password">Password :</label>
+        <input type="password" id="password" name="password" required>
+
+        <input class="btn login_btn" type="submit" value="Login">
+    </form>
+```
+
+Berikut merupakan penerapan post pada form login, html ini dikoneksikan ke fungsi berikut :
+
+```bash
+    def login_user(request):
+    if request.method == 'POST':
+        form = AuthenticationFor(data=request.POST)
+
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_att"))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+```
+Built in function `AuthenticationForm` membuat form khusus untuk login pada user sekaligus mengecek validitasnya. Apabila user belum meregistrasikan akun, maka user dapat membuat akun dari fungsi berikut
+
+```bash
+    def register(request):
+        form = UserCreationForm()
+
+        if request.method == "POST":
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your account has been successfully created!')
+                return redirect('main:login')
+        context = {'form':form}
+        return render(request, 'register.html', context)
+```
+Samahalnya dengan auth `UserCreationForm` merupakan fungsi bawaan yang dapat meregistrasikan django ke user. Fungsi login dan register ter afiliasi dengan tabel/model user secara otomatis di database. Model ini berisika user_id, username dan password yang dimiliki user. Database inilah juga yang terkoneksi menjadi foreign key pada model utama kita.
+
+Terakhir, ada fungsi baru untuk logout yang mampu meremore authenticated user yang ada pada request dan menghapus session user. Berikut merupakan implementasinya:
+
+```bash
+    def logout_user(request):
+        logout(request)
+        response = HttpResponseRedirect(reverse('main:login'))
+        response.delete_cookie('last_login')
+        return response
+```
+
+Fungsi `logout(request)` ini memberikan kemudahan user untuk logout dari akun yang digunakan dan mematikan sesi mereka saat itu. Seiringan dengan hal ini, sessionid yang sudah otomatis di save dan di inisiasi django pada cookies memberikan user keuntungan karena user tidak perlu repot login ke web lagi karena request selalu mendeteksi sessionid ini dan mengepass ke `@login_required(login_url='/login')` untuk mengecek sesi user.
+
+
+
+
