@@ -229,6 +229,8 @@ Dalam menghubungkan model product dan user pertama tama kita harus melihat `mode
 
 Di sini parameter models.CASCADE memberikan korelasi kuat dengan data dan user, fungsi ini memastikan bahwa user dihapus produk yang terhubung dengan user tersebut juga terhapus.
 
+Setelah inisiasi model ini dan migrate, model akan memiliki foreign key dari objek User yang mengepass id_unique user ke dalam model untuk mengidentifikasi user per submisi pada formnya
+
 <h2>3. Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.</h2>
 
 <h5>Authentication (Autentikasi):</h5>
@@ -473,6 +475,7 @@ Terakhir, ada fungsi baru untuk logout yang mampu meremore authenticated user ya
 
 Fungsi `logout(request)` ini memberikan kemudahan user untuk logout dari akun yang digunakan dan mematikan sesi mereka saat itu. Seiringan dengan hal ini, sessionid yang sudah otomatis di save dan di inisiasi django pada cookies memberikan user keuntungan karena user tidak perlu repot login ke web lagi karena request selalu mendeteksi sessionid ini dan mengepass ke `@login_required(login_url='/login')` untuk mengecek sesi user.
 
-
+<img width="552" alt="image" src="https://github.com/user-attachments/assets/9c19ce6e-8050-46f1-981a-49c07442ea40">
+<img width="634" alt="image" src="https://github.com/user-attachments/assets/2b3cc9dc-f75a-4f5d-be72-bfe97061b99c">
 
 
