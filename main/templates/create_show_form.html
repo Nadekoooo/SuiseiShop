@@ -1,103 +1,77 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Add New Item</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #4663ac;
+        background: url(https://static.vecteezy.com/system/resources/previews/002/617/560/non_2x/modern-pattern-of-planet-star-comet-with-different-rockets-universe-line-drawings-cosmos-vector.jpg) 60% 40%;
+        background-size: cover;
+    }
+</style>
+{% endblock meta %}
+
 {% block content %}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: "Poppins", sans-serif;
-            background-color: #4663ac;
-            padding: 20x;
-            height: 100vh; /* Full viewport height */
-            display: flex;
-            justify-content: center; /* Centers horizontally */
-            align-items: center; /* Centers vertically */
-            margin: 0; /* Removes default margin */
-            background: url(https://static.vecteezy.com/system/resources/previews/002/617/560/non_2x/modern-pattern-of-planet-star-comet-with-different-rockets-universe-line-drawings-cosmos-vector.jpg) 60% 40%;
-            background-size: cover;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%; /* Make the container stretch to the full width */
-            display: flex;
-            flex-direction: column; /* Ensures children are arranged in a column */
-            justify-content: space-between; /* Adds space between the elements */
-        }
-        h1 {
-            text-align: center;
-            font-size: 40px;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 10px;
-            margin: 20px 0;
-            color: #4663ac;
-        }
-        form {
-            margin-top: 20px;
-        }
-        table {
-            font-family: Helvetica, sans-serif;
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        td {
-            padding: 12px;
-            vertical-align: top;
-        }
-        td:first-child {
-            text-align: right;
-            font-weight: bold;
-            width: 30%;
-            padding-right: 20px;
-        }
-        td:last-child {
-            width: 70%;
-        }
-        input[type="text"], input[type="number"], textarea, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        input[type="submit"] {
-            background-color: #7AA9Ed;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            margin-top: 20px;
-        }
-        input[type="submit"]:hover {
-            background-color: #7AA9Ed;
-        }
-        textarea {
-            resize: vertical;
-        }
-    </style>
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-8">
+        <div>
+            <h1 class="text-3xl text-center font-extrabold text-[#4663ac] uppercase tracking-widest">
+                Add New Item
+            </h1>
+        </div>
 
-    <div class="container">
-        <h1>Add New Item</h1>
-
-        <form method="POST">
+        <!-- Form Container -->
+        <form method="POST" class="space-y-6">
             {% csrf_token %}
-            <table>
-                {{ form.as_table }}
-                <tr>
-                    <td colspan="2">
-                        <input type="submit" value="Create Show Form" />
-                    </td>
-                </tr>
-            </table>
+            {% for field in form %}
+            <div class="flex flex-col">
+                <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-gray-700">
+                    {{ field.label }}
+                </label>
+                <div class="w-full">
+                    <input type="{{ field.field.widget.type }}" name="{{ field.name }}" id="{{ field.id_for_label }}"
+                           value="{{ field.value|default:'' }}"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                           {% if field.value %} value="{{ field.value }}"{% endif %} />
+                </div>
+                {% if field.help_text %}
+                <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+                {% endif %}
+                {% for error in field.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <div>
+                <button type="submit"
+                    class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#7AA9Ed] hover:bg-[#5f87c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Create Item
+                </button>
+            </div>
         </form>
-    </div>
-{% endblock content %}
 
+        {% if messages %}
+        <div class="mt-4">
+            {% for message in messages %}
+            {% if message.tags == "success" %}
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ message }}</span>
+            </div>
+            {% elif message.tags == "error" %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ message }}</span>
+            </div>
+            {% else %}
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ message }}</span>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

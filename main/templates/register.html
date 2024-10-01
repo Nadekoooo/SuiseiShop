@@ -1,151 +1,70 @@
 {% extends 'base.html' %}
 
 {% block meta %}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <title>Register</title>
-<style>
-    body {
-        font-family: "Poppins", sans-serif;
-        background-color: #4663ac;
-        padding: 20px;
-        height: 100vh; /* Full viewport height */
-        display: flex;
-        justify-content: center; /* Centers horizontally */
-        align-items: center; /* Centers vertically */
-        margin: 0; /* Removes default margin */
-        background: url(https://static.vecteezy.com/system/resources/previews/002/617/560/non_2x/modern-pattern-of-planet-star-comet-with-different-rockets-universe-line-drawings-cosmos-vector.jpg) 60% 40%;
-        background-size: cover;
-    }
-    .container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        max-width: 450px; /* Adjusts the form width */
-        width: 100%; /* Make the container stretch to the full width */
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Centers the contents horizontally */
-        justify-content: center; /* Centers the contents vertically */
-    }
-    h1 {
-        text-align: center;
-        font-size: 30px;
-        text-transform: uppercase;
-        font-weight: 600;
-        letter-spacing: 10px;
-        margin: 20px 0;
-        color: #4663ac;
-    }
-    form {
-        width: 100%; /* Ensure the form takes up the full width of the container */
-    }
-    label {
-        font-weight: 400;
-        margin-bottom: 5px;
-        display: block;
-        text-align: left;
-        width: 100%;
-        padding-left: 5px;
-        color: #4663ac;
-    }
-    input[type="text"], input[type="password"], input[type="email"], input[type="number"], textarea, select {
-        width: 100%; /* Ensures full width of the input */
-        max-width: 350px; /* Limits the input width */
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-        margin-bottom: 15px; /* Adds spacing between input fields */
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    input[type="submit"] {
-        background-color: #7AA9Ed;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        width: 100%; /* Makes the button expand the full width */
-        max-width: 350px;
-        margin: 0 auto; /* Centers the button horizontally */
-        display: block;
-    }
-    input[type="submit"]:hover {
-        background-color: #5f87c7;
-    }
-    .helptext {
-        font-size: 12px;
-        color: #777;
-        margin-bottom: 10px;
-        display: block;
-        padding-left: 15px;
-        text-align: left;
-    }
-    .errorlist {
-        color: red;
-        font-size: 12px;
-        padding-left: 5px;
-        margin-bottom: 5px;
-    }
-</style>
 {% endblock meta %}
 
 {% block content %}
-<div class="container">
-  <h1>Register</h1>
-
-  <form method="POST">
-    {% csrf_token %}
-
-    <label for="id_username">Username :</label>
-    {{ form.username }}
-    {% if form.username.errors %}
-      <ul class="errorlist">
-        {% for error in form.username.errors %}
-          <li>{{ error }}</li>
+<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 form-style">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-black">
+        Create your account
+      </h2>
+    </div>
+    <form class="mt-8 space-y-6" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="remember" value="true">
+      <div class="rounded-md shadow-sm -space-y-px">
+        {% for field in form %}
+          <div class="{% if not forloop.first %}mt-4{% endif %}">
+            <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-black">
+              {{ field.label }}
+            </label>
+            <div class="relative">
+              {{ field }}
+              <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                {% if field.errors %}
+                  <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                {% endif %}
+              </div>
+            </div>
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+          </div>
         {% endfor %}
-      </ul>
+      </div>
+
+      <div>
+        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          Register
+        </button>
+      </div>
+    </form>
+
+    {% if messages %}
+    <div class="mt-4">
+      {% for message in messages %}
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ message }}</span>
+      </div>
+      {% endfor %}
+    </div>
     {% endif %}
-    <div class="helptext">{{ form.username.help_text }}</div>
 
-    <label for="id_password1">Password :</label>
-    {{ form.password1 }}
-    {% if form.password1.errors %}
-      <ul class="errorlist">
-        {% for error in form.password1.errors %}
-          <li>{{ error }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-    <div class="helptext">{{ form.password1.help_text }}</div>
-
-    <label for="id_password2">Password confirmation :</label>
-    {{ form.password2 }}
-    {% if form.password2.errors %}
-      <ul class="errorlist">
-        {% for error in form.password2.errors %}
-          <li>{{ error }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-    <div class="helptext">{{ form.password2.help_text }}</div>
-
-    <input type="submit" name="submit" value="Register" />
-  </form>
-
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
+    <div class="text-center mt-4">
+      <p class="text-sm text-black">
+        Already have an account?
+        <a href="{% url 'main:login' %}" class="font-medium text-indigo-200 hover:text-indigo-300">
+          Login here
+        </a>
+      </p>
+    </div>
+  </div>
 </div>
-
 {% endblock content %}

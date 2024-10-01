@@ -1,125 +1,83 @@
 {% extends 'base.html' %}
 
 {% block meta %}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<title>Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
     body {
-        font-family: "Poppins", sans-serif;
+        font-family: 'Poppins', sans-serif;
         background-color: #4663ac;
-        padding: 20px;
-        height: 100vh; /* Full viewport height */
-        display: flex;
-        justify-content: center; /* Centers horizontally */
-        align-items: center; /* Centers vertically */
-        margin: 0; /* Removes default margin */
         background: url(https://static.vecteezy.com/system/resources/previews/002/617/560/non_2x/modern-pattern-of-planet-star-comet-with-different-rockets-universe-line-drawings-cosmos-vector.jpg) 60% 40%;
         background-size: cover;
     }
-    .container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        max-width: 600px; /* Adjusts the form width */
-        height: 350px;
-        width: 100%; /* Make the container stretch to the full width */
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Centers the contents horizontally */
-        justify-content: center; /* Centers the contents vertically */
-    }
-    h1 {
-        text-align: center;
-        font-size: 35px;
-        text-transform: uppercase;
-        font-weight: 600;
-        letter-spacing: 10px;
-        margin: 20px 0;
-        color: #4663ac;
-    }
-    form {
-        width: 100%; /* Ensure the form takes up the full width of the container */
-    }
-    label {
-        font-weight: 400;
-        margin-bottom: 5px;
-        display: block;
-        text-align: center;
-        width: 100%;
-        color: #4663ac;
-    }
-    input[type="text"], input[type="password"] {
-        width: 100%; /* Ensures full width of the input */
-        max-width: 300px; /* Limits the input width */
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-        margin-bottom: 15px; /* Adds spacing between input fields */
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    input[type="submit"] {
-        background-color: #7AA9Ed;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        width: 100%; /* Makes the button expand the full width */
-        max-width: 300px;
-        margin: 0 auto; /* Centers the button horizontally */
-        display: block;
-    }
-    input[type="submit"]:hover {
-        background-color: #5f87c7;
-    }
-    .register-section {
-        margin-top: 15px;
-        text-align: center;
-    }
-    .register-section a {
-        color: #4663ac;
-        text-decoration: none;
-    }
-    .register-section a:hover {
-        text-decoration: underline;
-    }
 </style>
-<title>Login</title>
 {% endblock meta %}
 
 {% block content %}
-<div class="container">
-  <h1>Login</h1>
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-8">
+    <div>
+      <h2 class="text-3xl text-center font-extrabold text-[#4663ac] uppercase tracking-widest">
+        Login to your account
+      </h2>
+    </div>
 
-  <form method="POST" action="">
-    {% csrf_token %}
-    <label for="username">Username :</label>
-    <input type="text" id="username" name="username" required>
-    
-    <label for="password">Password :</label>
-    <input type="password" id="password" name="password" required>
+    <form class="mt-8 space-y-6" method="POST" action="">
+      {% csrf_token %}
+      <input type="hidden" name="remember" value="true">
 
-    <input class="btn login_btn" type="submit" value="Login">
-  </form>
+      <div class="rounded-md shadow-sm space-y-4">
+        <div>
+          <label for="username" class="sr-only">Username</label>
+          <input id="username" name="username" type="text" required
+            class="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Username">
+        </div>
 
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-  
-  <div class="register-section">
-      <span>Don't have an account yet?</span>
-      <a href="{% url 'main:register' %}">Register Now</a>
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <input id="password" name="password" type="password" required
+            class="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Password">
+        </div>
+      </div>
+
+      <div>
+        <button type="submit"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#7AA9Ed] hover:bg-[#5f87c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          Login
+        </button>
+      </div>
+    </form>
+
+    {% if messages %}
+    <div class="mt-4">
+      {% for message in messages %}
+      {% if message.tags == "success" %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+          <span class="block sm:inline">{{ message }}</span>
+        </div>
+      {% elif message.tags == "error" %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span class="block sm:inline">{{ message }}</span>
+        </div>
+      {% else %}
+        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+          <span class="block sm:inline">{{ message }}</span>
+        </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+      <p class="text-sm text-[#4663ac]">
+        Don't have an account yet?
+        <a href="{% url 'main:register' %}" class="font-medium text-[#7AA9Ed] hover:text-[#5f87c7]">
+          Register Now
+        </a>
+      </p>
+    </div>
   </div>
 </div>
-
 {% endblock content %}
