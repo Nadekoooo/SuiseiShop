@@ -546,6 +546,10 @@ Cara mengimplementasikan ketiga hal tersebut dapat dilakukan melalui 2 cara yait
 
 ```
 
+[![0_QFVzwn5M81QunEUX](https://github.com/user-attachments/assets/a19fde27-9a2f-47ea-96a4-1f0f020d18e2)](https://github.com/Nadekoooo/SuiseiShop/issues/3#issue-2560670299)
+Berikut merupakan visualisasinya
+
+
 <h2>Jelaskan konsep flex box dan grid layout beserta kegunaannya!</h2>
 
 Secara general Flexbox dan grid layout merupakan cara untuk mengatur tata letak dari suatu div ataupun section yang ingin diberikan styling khusus. Ada beberapa perbedaan definisi dan kegunaannya: 
@@ -573,6 +577,7 @@ Secara general Flexbox dan grid layout merupakan cara untuk mengatur tata letak 
     }
 
 ```
+Grid sendiri disini menggunakan 1fr yang berarti membagi sisa halaman menjadi 1 bagian, grid ini secara spesifik mendefinisikan ukuran asli dari cakupannya, maka lebih cocok untuk desain yang fixed/tetap.
 
 <h2>Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!</h2>
 
@@ -681,4 +686,6 @@ Karena fleksibilitas dan responsive design penting, saya mencoba menambahkan beb
 `<h1 class="text-3xl sm:text-[60px] md:text-[80px] lg:text-[120px] font-bold text-white">Suisei Shop</h1>`
 
 Saya meng-adjust ini dengan tailwind dan memberikan default text sebesar 3xl dan berbagai kasus ukurang layar.
+
+Sisa html lain dapat diliat pada file commit dan html tambahan yang saya buat kebanyakan menggunakan tailwind untuk CSSnya dan beberapa adjustment baru dibanding tugas sebelumnya.
 
