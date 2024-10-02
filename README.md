@@ -546,8 +546,9 @@ Cara mengimplementasikan ketiga hal tersebut dapat dilakukan melalui 2 cara yait
 
 ```
 
+[![0_QFVzwn5M81QunEUX](https://github.com/user-attachments/assets/a19fde27-9a2f-47ea-96a4-1f0f020d18e2)](https://github.com/Nadekoooo/SuiseiShop/issues/3#issue-2560670299)
 Berikut merupakan visualisasinya
-![0_QFVzwn5M81QunEUX](https://github.com/user-attachments/assets/a19fde27-9a2f-47ea-96a4-1f0f020d18e2)
+
 
 <h2>Jelaskan konsep flex box dan grid layout beserta kegunaannya!</h2>
 
