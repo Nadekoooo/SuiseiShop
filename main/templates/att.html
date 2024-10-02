@@ -6,7 +6,7 @@
 
 {% block content %}
 {% include 'navbar.html' %}
-<div class="min-h-screen" style="background-image: url('https://static.vecteezy.com/system/resources/previews/002/617/560/non_2x/modern-pattern-of-planet-star-comet-with-different-rockets-universe-line-drawings-cosmos-vector.jpg'); background-size: cover;">    
+<div class="min-h-screen bg-blue-950"">    
     
     <div class="fixed max-w-screen-2xl w-full flex justify-between bottom-4 items-center rounded-lg px-4 z-20 mx-auto left-3 right-3 py-2 bg-blue-950">
 
@@ -25,13 +25,16 @@
     
     
     <div class="w-full relative z-10 p-6">
-        <div class="rounded-lg h-screen  shadow-lg bg-white" style="margin-top: 60px; margin-buttom: 20px"> <!-- Adjusted to fit below the navbar -->
-            <div class = "item-center flex w-full  bg-blue-500 relative h-80">
-                <div class = "w-1/2">
-                    <h1>Welcome to madik</h1>
+        <div class="rounded-lg h-screen overflow-hidden shadow-lg bg-white" style="margin-top: 60px; margin-buttom: 20px"> <!-- Adjusted to fit below the navbar -->
+
+            <div class="w-full h-80 relative">
+                <div class="w-full h-full pl-[130px] absolute top-0 bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700/10 z-10 ">
+                    <div class="w-1/2 flex items-center h-full">
+                        <h1 class="text-3xl sm:text-[60px] md:text-[80px] lg:text-[120px] font-bold text-white">Suisei Shop</h1>
+                    </div>
                 </div>
-                <div class = " inset-0 absolute right-0">
-                    <img class = "h-full w-1/2 object-cover"src='https://lastfm.freetls.fastly.net/i/u/ar0/9878ce671f84d6f2defcc221c81b2b49.jpg' alt="">
+                <div class="w-1/2 h-full absolute top-0 right-0">
+                    <img class="w-full h-full object-cover" src="https://lastfm.freetls.fastly.net/i/u/ar0/9878ce671f84d6f2defcc221c81b2b49.jpg" alt="">
                 </div>
             </div>
             <!-- <div class="text-center mb-12 h-80 " style = "background-image:url('https://lastfm.freetls.fastly.net/i/u/ar0/9878ce671f84d6f2defcc221c81b2b49.jpg')">
@@ -40,8 +43,12 @@
 
             <div class="flex-col p-6 items-center justify-center">
                 {% if not item %}
-                <img src="{% static 'image/mantap.png' %}" alt="Sad face" class="w-28 h-auto mb-4 object-contain" />
-                <p class="text-center text-blue-700 mt-4">Belum ada data barang pada Suisei Shop.</p>
+                <div class = "flex flex-col mt-8 justify-center items-center">
+
+                        <img src="{% static 'image/mantap.png' %}" alt="Sad face" class="w-28 h-auto mb-4 object-contain" />
+                        <p class="text-blue-700 mt-4">Belum ada data barang pada Suisei Shop.</p>
+
+                </div>
                 {% else %}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for att in item %}

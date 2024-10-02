@@ -479,3 +479,206 @@ Fungsi `logout(request)` ini memberikan kemudahan user untuk logout dari akun ya
 <img width="634" alt="image" src="https://github.com/user-attachments/assets/2b3cc9dc-f75a-4f5d-be72-bfe97061b99c">
 
 
+<h1>Tugas 5</h1>
+
+<h2>Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!</h2>
+
+CSS Selector pada suatu element HTML memiliki beberapa aturan/urutan penerapan dalam selector tersebut, hal ini bertujuan untuk memberikan kemampuan elemen untuk memiliki spesifikasi khusus dan lebih mendetail.
+
+Ada beberapa urutan CSS selector, berikut adalah urutanya : 
+
+<h5>Inline styles (langsung pada elemen dengan atribut style) memiliki prioritas tertinggi.</h5>
+<h5>ID selectors (#id) memiliki prioritas lebih tinggi daripada class, pseudo-class, atau attribute selectors.</h5>
+<h5>Class selectors, pseudo-class selectors, dan attribute selectors memiliki prioritas lebih tinggi daripada element selectors.</h5>
+<h5>Element selectors (misalnya, p, div) memiliki prioritas paling rendah.</h5>
+<h5>Jika ada dua atau lebih selector dengan prioritas yang sama, maka aturan CSS yang muncul terakhir dalam urutan file yang akan digunakan.</h5>
+<h5>!important dapat mengesampingkan semua aturan di atas, meskipun penggunaannya tidak direkomendasikan.</h5>
+
+Dari contoh urutan ini kita dapat mengambil beberapa contoh
+
+```bash
+    #myDiv { color: red; } /* ID selector */
+    .myClass { color: blue; } /* Class selector */
+    div { color: green; } /* Element selector */
+
+```
+
+di sini karena id selector didahulukan, class dan element selector diabaikan dan warna teks akan menjadi warna merah.
+
+<h2>Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!</h2>
+
+Responsive design memungkinkan tampilan web menyesuaikan dengan ukuran layar perangkat yang berbeda, seperti desktop, tablet, atau smartphone. Ini penting karena pengguna mengakses web dari berbagai perangkat, sehingga pengalaman pengguna perlu optimal di semua ukuran layar, dengan adanya responsive design sebuah aplikasi menjadi mampu mengakomodasi lebih banyak user dan membuatnya lebih fleksibel.
+
+Beberapa contoh aplikasi web yang sudah menerapkan responsive design adalah
+- Google
+- Twitter
+- Facebook
+- dll
+
+Adapun beberapa aplikasi web yang masih belum menerapkan konsep ini
+- MySpace
+- Friendster
+- https://demos.vlsm.org
+
+<h2>Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!</h2>
+
+Margin, border dan padding merupakan salah satu komponen penting dan dasar pada CSS. Implikasi dan penerapan ketiga hal ini sangatlah penting dalam dinamikalitas suatu aplikasi web agar tampilannya lebih menarik dan tertata sebagaimana mestinya. Berikut definisi dari ketiga hal tersebut.
+
+- Margin: Ruang kosong di luar elemen, mendorong elemen lain di sekitarnya. Digunakan untuk memberi jarak antar elemen.
+- Border: Garis yang mengelilingi elemen, berada di antara margin dan padding. Border dapat diatur dengan ketebalan, warna, dan jenis garis.
+- Padding: Ruang kosong di dalam elemen, di antara konten elemen dan border-nya. Padding mengatur jarak antara konten dan tepi elemen.
+
+Cara mengimplementasikan ketiga hal tersebut dapat dilakukan melalui 2 cara yaitu:
+- Melalui Framework : Framework seperti tailwind memungkinkan pengguna untuk menerapkan inline adjustment pengguna dengan singkat menggunakan beberapa kode pendek, dan framework ini akan mentranslasikan kode tadi ke CSS asalnya
+
+```bash
+    <div class="p-4 m-2 border border-gray-400 rounded-lg">
+```
+
+- Manual menggunakan CSS : Melalui CSS manual, kita dapat mendefine ketiga style ini pada kolom style pada html webnya, kita juga dapat menerapkan CSS selector untuk mengatur elemen spesifik pada aplikasi web. Berikut merupakan contoh class selector yang menerapkan margin border dan padding.
+
+```bash
+    .box {
+    margin: 10px; /* Jarak di luar elemen */
+    border: 2px solid black; /* Garis tebal di sekeliling elemen */
+    padding: 15px; /* Jarak di dalam elemen */
+    }
+
+```
+
+<h2>Jelaskan konsep flex box dan grid layout beserta kegunaannya!</h2>
+
+Secara general Flexbox dan grid layout merupakan cara untuk mengatur tata letak dari suatu div ataupun section yang ingin diberikan styling khusus. Ada beberapa perbedaan definisi dan kegunaannya: 
+
+- Flexbox: Digunakan untuk tata letak satu dimensi (horizontal atau vertikal). Flexbox mempermudah penataan elemen dalam satu baris atau kolom dengan distribusi ruang yang dinamis.
+
+* Kegunaan: Ideal untuk menyusun elemen seperti navbar, card layout, atau item list yang perlu dirapikan secara horizontal atau vertikal.
+
+```bash
+    .container {
+    display: flex;
+    justify-content: space-between; /* Membagi elemen dengan jarak yang sama */
+    }
+
+```
+
+- Grid Layout: Digunakan untuk tata letak dua dimensi (baris dan kolom). Grid memungkinkan pembagian area yang lebih kompleks dengan kontrol pada baris dan kolom.
+
+* Kegunaan: Cocok untuk desain tata letak halaman yang kompleks seperti dashboard atau galeri foto.
+
+```bash
+    .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Membagi dalam 3 kolom */
+    }
+
+```
+
+<h2>Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!</h2>
+
+Untuk task pertama dalam menghapus dan mengedit produk, seperti biasa saya mengedit views.py sehingga terdapat fungsi yang mengakomodir kedua kebutuhan ini
+
+```bash
+    def edit_product(request, id):
+    # Get mood entry berdasarkan id
+    product = ProductEntry.objects.get(pk = id)
+
+    # Set mood entry sebagai instance dari form
+    form = SuiseiMainForm(request.POST or None, instance = product)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_att'))
+
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+
+    def delete_product(request, id):
+        # Get mood berdasarkan id
+        product = ProductEntry.objects.get(pk = id)
+        # Hapus mood
+        product.delete()
+        # Kembali ke halaman awal
+        return HttpResponseRedirect(reverse('main:show_att'))
+```
+
+Kedua fungsi ini menerima id yang merupakan primary key dari objek untuk mengambil bagian spesifik/tuple data yang sesuai dengan kebutuhan edit/delesi.
+
+Pada edit product saya memastikan bahwa fort edit itu valid dan melakukan re.save() pada produk yang sudah dalam tampilan form. Untuk delete saya mendelete instansi tersebut agar data hilang dari model/db kita.
+
+Setelah menerapkan fungsi, saya akan membuat link pada urls.py agar pengguna dan operasi selanjutnya dipermudah melalui pemanggila redirect link.
+
+```bash
+    path('edit-product/<uuid:id>', edit_product, name='edit_product'),
+    path('delete/<uuid:id>', delete_product, name='delete_product')
+```
+
+Di sini saya menyeleksi id dari produk yang akan saya edit dan delete, pemanggil href pada html akan me redirect ke link di atas dan fungsi pada views.py bersangkutan akan berjalan.
+
+Setelah itu, saya membuat instansi html agar seluruh pengaturan ini terhubung dan user dapat mengakses fitur baru ini.
+
+Setelah itu, saya memberikan CSS related element seperti navbar, card info atau card product. Untuk navbar saya menggunakan CSS yang sudah diintegrasikan oleh penggunaan tailwind, namun untuk card info dan product saya langsung memasukannya di att.html dan langsung menggunakan tailwind untuk stylingnya. 
+
+Pada navbar terdapat verifikasi user
+
+```bash
+    <div class="hidden md:flex items-center">
+              {% if user.is_authenticated %}
+              <span class="text-gray-300 mr-4">Welcome, {{ user.username }}</span>
+              <a href="{% url 'main:logout' %}" class="text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                  Logout
+              </a>
+              {% else %}
+              <a href="{% url 'main:login' %}" class="text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 mr-2">
+                  Login
+              </a>
+              <a href="{% url 'main:register' %}" class="text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                  Register
+              </a>
+              {% endif %}
+    </div>
+```
+
+verifikasi ini akan menentukan kemunculan tombol pada navbar, apabila sudah ada user, maka user akan diwelcome dan apabila belum akan diminta register (Untuk kasus sekarang masih belum bisa diakses karena redireksi show_att)
+
+kemudian saya memberikan fleksibilitas untuk navbar pada tampilan mobile dengan beberapa syntax js
+
+```bash
+    <div class="mobile-menu hidden md:hidden px-4 w-full md:max-w-full">
+        <div class="pt-2 pb-3 space-y-1 mx-auto">
+            <a href="{% url 'main:show_att' %}" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md">Home</a>
+            <a href="{% url 'main:show_att' %}" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md">Products</a>
+            <a href="{% url 'main:show_att' %}" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md">Categories</a>
+            <a href="{% url 'main:show_att' %}" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md">Cart</a>
+            {% if user.is_authenticated %}
+            <span class="block text-gray-300 px-3 py-2">Welcome, {{ user.username }}</span>
+            <a href="{% url 'main:logout' %}" class="block text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Logout
+            </a>
+            {% else %}
+            <a href="{% url 'main:login' %}" class="block text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 mb-2">
+                Login
+            </a>
+            <a href="{% url 'main:register' %}" class="block text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Register
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+    </script>
+```
+
+Karena fleksibilitas dan responsive design penting, saya mencoba menambahkan beberapa adjustment pada aplikasi seperti 
+
+`<h1 class="text-3xl sm:text-[60px] md:text-[80px] lg:text-[120px] font-bold text-white">Suisei Shop</h1>`
+
+Saya meng-adjust ini dengan tailwind dan memberikan default text sebesar 3xl dan berbagai kasus ukurang layar.
+
