@@ -3,99 +3,108 @@
 {% block meta %}
 <title>Login</title>
 <style>
-
     .bg-image {
-            /* The image used */
-            background-image: url('https://static.vecteezy.com/system/resources/previews/002/617/560/non_2x/modern-pattern-of-planet-star-comet-with-different-rockets-universe-line-drawings-cosmos-vector.jpg');
-            
-            /* Full viewport size */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
+        /* The background image */
+        background-image: url('https://static.vecteezy.com/system/resources/previews/002/617/560/non_2x/modern-pattern-of-planet-star-comet-with-different-rockets-universe-line-drawings-cosmos-vector.jpg');
+        
+        /* Full viewport size */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
 
-            /* Background properties */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+        /* Background properties */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
 
-            /* Blur effect */
-            filter: blur(5px);
-            -webkit-filter: blur(5px);
+        /* Blur effect */
+        filter: blur(5px);
+        -webkit-filter: blur(5px);
 
-            /* Ensure the background is behind other content */
-            z-index: -1;
-        }
+        /* Ensure the background is behind other content */
+        z-index: -1;
+    }
 </style>
 {% endblock meta %}
 
 {% block content %}
-<div class = "bg-image"></div>
+<div class="bg-image"></div>
 <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-  <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-8">
-    <div>
-      <h2 class="text-3xl text-center font-bold text-[#4663ac] uppercase tracking-widest">
-        Login to your account
-      </h2>
+  <div class="flex bg-white h-[500px] rounded-xl shadow-lg w-[600px] relative">
+    
+    <!-- Left side with the character image -->
+    <img src="https://static.miraheze.org/hololivewiki/thumb/5/55/Hoshimachi_Suisei_-_Portrait_3D_05.png/280px-Hoshimachi_Suisei_-_Portrait_3D_05.png" alt="Hoshimachi Suisei" class="z-20 object-cover h-[85%] w-auto absolute bottom-0 right-[243px]">
+    <div class="hidden md:flex w-[40%] bg-blue-900 text-white rounded-xl justify-center items-center relative"></div>
+    <div class="absolute bottom-20 text-vertical tracking-widest rotate-90 text-xl z-30 text-white -left-9">
+      星街すいせい
     </div>
 
-    <form class="mt-8 space-y-6" method="POST" action="">
-      {% csrf_token %}
-      <input type="hidden" name="remember" value="true">
+    <!-- Right side with the login form -->
+    <div class="w-full md:w-[60%] flex item-center justify-center flex-col space-y-8 p-8">
 
-      <div class="rounded-md shadow-sm space-y-4">
+      <form class="mt-8 space-y-6" method="POST" action="">
+        {% csrf_token %}
+        <h2 class="text-6xl text-center font-bold text-[#4663ac]">
+          Hello!!
+        </h2>
+        <input type="hidden" name="remember" value="true">
+
+        <div class="rounded-md shadow-sm space-y-4">
+          <div>
+            <label for="username" class="sr-only">Username</label>
+            <input id="username" name="username" type="text" required
+              class="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="Username">
+          </div>
+
+          <div>
+            <label for="password" class="sr-only">Password</label>
+            <input id="password" name="password" type="password" required
+              class="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="Password">
+          </div>
+        </div>
+
         <div>
-          <label for="username" class="sr-only">Username</label>
-          <input id="username" name="username" type="text" required
-            class="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            placeholder="Username">
+          <button type="submit"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#333185] hover:bg-[#0B151F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Login
+          </button>
         </div>
+      </form>
 
-        <div>
-          <label for="password" class="sr-only">Password</label>
-          <input id="password" name="password" type="password" required
-            class="appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            placeholder="Password">
-        </div>
+      {% if messages %}
+      <div class="mt-4">
+        {% for message in messages %}
+        {% if message.tags == "success" %}
+          <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+          </div>
+        {% elif message.tags == "error" %}
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+          </div>
+        {% else %}
+          <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+          </div>
+        {% endif %}
+        {% endfor %}
       </div>
-
-      <div>
-        <button type="submit"
-          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#333185] hover:bg-[#0B151F] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-          Login
-        </button>
-      </div>
-    </form>
-
-    {% if messages %}
-    <div class="mt-4">
-      {% for message in messages %}
-      {% if message.tags == "success" %}
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-          <span class="block sm:inline">{{ message }}</span>
-        </div>
-      {% elif message.tags == "error" %}
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-          <span class="block sm:inline">{{ message }}</span>
-        </div>
-      {% else %}
-        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
-          <span class="block sm:inline">{{ message }}</span>
-        </div>
       {% endif %}
-      {% endfor %}
-    </div>
-    {% endif %}
 
-    <div class="text-center mt-4">
-      <p class="text-sm text-[#4663ac]">
-        Don't have an account yet?
-        <a href="{% url 'main:register' %}" class="font-medium text-[#333185] hover:text-[#5f87c7]">
-          Register Now
-        </a>
-      </p>
+      <div class="text-center mt-4">
+        <p class="text-sm text-[#4663ac]">
+          Don't have an account yet?
+          <a href="{% url 'main:register' %}" class="font-medium text-[#333185] hover:text-[#5f87c7]">
+            Register Now
+          </a>
+        </p>
+      </div>
     </div>
+
   </div>
 </div>
 {% endblock content %}
