@@ -117,7 +117,7 @@ def delete_product(request, id):
 
 @csrf_exempt
 @require_POST
-def add_product_ajax(request):
+def create_ajax(request):
     
     name = strip_tags(request.POST.get("name"))
     price = strip_tags(request.POST.get("price"))

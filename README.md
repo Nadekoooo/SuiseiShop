@@ -689,3 +689,274 @@ Saya meng-adjust ini dengan tailwind dan memberikan default text sebesar 3xl dan
 
 Sisa html lain dapat diliat pada file commit dan html tambahan yang saya buat kebanyakan menggunakan tailwind untuk CSSnya dan beberapa adjustment baru dibanding tugas sebelumnya.
 
+
+<h1>Tugas 6</h1>
+
+<h2> Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!</h2>
+
+JavaScript merupakan bahasa pemrograman dinamis yang memang sangat berkorelasi dengna pengembangan web, hal ini dikarenakan kepraktisan dalam penggunaannya dan disisi lain adanya kompatibilas yang tidak dimiliki oleh platform atau bahasa pemrograman lainnya.
+Beberapa poin penting yang merupakan manfaat dari penggunaan javascript ialah:
+
+- Interaktif dan Dinamis: JavaScript memungkinkan pembuatan elemen interaktif seperti tombol, form, dan animasi tanpa memuat ulang halaman.
+- Kemampuan validasi Data di Sisi Klien: Memungkinkan validasi data sebelum dikirim ke server, sehingga mengurangi beban server dan meningkatkan efisiensi.
+- Manipulasi DOM: Mempermudah pengubahan elemen HTML dan CSS secara langsung untuk memperbarui tampilan tanpa reload halaman.
+- Komunikasi Asinkron (AJAX): Mengizinkan pengambilan data dari server di latar belakang tanpa menyegarkan halaman, meningkatkan pengalaman pengguna.
+- Cross-Platform: JavaScript berjalan di semua browser modern dan kompatibel di berbagai perangkat.
+- Full-stack Development: Dengan Node.js, JavaScript dapat digunakan di sisi server, memungkinkan pengembangan aplikasi full-stack.
+- Real-Time Application: Mendukung pengembangan aplikasi real-time seperti chat dan game online.
+
+Dan masih banyak lagi, pada kasus tugas ini kita sudah menggunakan javascript dalam penggunaan AJAX juga untuk mengatur dinamisme web yang ada.
+
+```bash
+function addProductEntry() {
+    fetch("{% url 'main:add_product_ajax' %}", {
+      method: "POST",
+      body: new FormData(document.querySelector('#productEntryForm')),
+    })
+    .then(response => {
+        refreshProductEntries();
+        // Delay closing the modal to ensure the refresh is done first
+        setTimeout(() => {
+            hideModal();
+        }, 100); // Adjust the timeout if necessary
+    });
+
+    document.getElementById("productEntryForm").reset(); 
+    document.querySelector("[data-modal-toggle='crudModal']").click();
+
+    return false;
+  }
+```
+
+Ini adalah salah satu contoh bagaian kegunaan javascript dalam relasi asynchronous web dan mengatur beberapa komponen dinamis dalam add ajax
+
+<h2>Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?</h2>
+
+Sebagaimana dijelaskan pada tutorial mengenai AJAX, fungsi await pada fetch merupakan fungsi yang penting keberadaannya dalam fetch.
+Fungsi dari penggunaan await ini ialah agar program mampu menunggu hingga peroses asingkronus selesai terlebih dahulu sebelum dilanjutkan ke kode selanjutnya.
+Dengan fungsi `await` ini javascript akan "memberikan masa tunggu" pada kode yang menggunakan `await` sampai kode tersebut selesai.
+
+Salah satu contohnya ialah ini
+```bash
+    let response = await fetch(url); // Menunggu fetch selesai
+    console.log(response); // Akan menampilkan data dari response jika fetch berhasil
+```
+
+Di kode ini console log akan menunggu fungsi fetch url sampai selesai terlebih dahulu sebelum memprint valuenya di console.
+
+Apabila `await` tidak digunakan, maka `fetch()` tetap berjalan secara asynchronous, tetapi kode di bawahnya akan langsung dieksekusi tanpa menunggu hasil dari fetch(). Ini bisa menyebabkan masalah, karena data yang diharapkan dari fetch() mungkin belum tersedia saat kita mencoba mengaksesnya.
+
+
+<h2> Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?</h2>
+
+Kita perlu menggunakan decorator `@csrf_exempt` pada view yang akan digunakan untuk AJAX POST karena Django, secara default, memerlukan token CSRF (Cross-Site Request Forgery) untuk setiap permintaan POST sebagai langkah keamanan untuk mencegah serangan CSRF.
+
+Penggunaan `@csrf_exempt` disini ialah agar Django tidak perlu mengecek keberadaan token pada `POST` request yang dikirimkan ke sebuah fungsi demi menghindari waktu tunggu yang tidak perlu.
+Hal ini sebenarnya didukung oleh bagaimana implementasi struktur form dan verifikasi user yang sudah ada. Karena pada kasus tugas ini, form, user dan login activity sudah diverifikasi oleh `{% csrf_token %}` maka tidak perlu melakukan pengecekan csrf lagi di sini.
+
+Implementasi pada fungsinya sendiri dapat dilihat di bagian kode
+
+```bash
+    def create_ajax(request):
+        
+    name = strip_tags(request.POST.get("name"))
+    price = strip_tags(request.POST.get("price"))
+    stock = strip_tags(request.POST.get("stock"))
+    description = strip_tags(request.POST.get("description"))
+    category = strip_tags(request.POST.get("category"))
+    user = request.user
+
+    new_item = ProductEntry(
+        name = name, price = price, stock = stock, description = description, category = category,
+        user=user
+    )
+    new_item.save()
+
+    return HttpResponse(b"CREATED", status=201)
+```
+
+Di sini fungsi tidak perlu lagi menerima csrf karena input user sudah dipastikan sebelumnya.
+
+<h2>Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?</h2>
+
+Pada tugas kali ini, pembersihan data dilakukan dari sisi frontend dan juga backend. 
+Pembersihan data dilakukan pada backend di fungsi berikut 
+
+```bash
+    def clean_name(self):
+    return strip_tags(self.cleaned_data["name"])
+
+    def clean_price(self):
+    return strip_tags(self.cleaned_data["price"])
+
+    def clean_stock(self):
+    return strip_tags(self.cleaned_data["stock"])
+
+    def clean_description(self):
+    return strip_tags(self.cleaned_data["description"])
+
+    def clean_category(self):
+    return strip_tags(self.cleaned_data["category"])
+```
+
+Dan pembersihannya di frontend ada pada att.html di project ini
+
+```bash
+    const name = DOMPurify.sanitize(item.fields.name);
+    const price = DOMPurify.sanitize(item.fields.price);
+    const stock = DOMPurify.sanitize(item.fields.stock);
+    const description = DOMPurify.sanitize(item.fields.description);
+    const category = DOMPurify.sanitize(item.fields.category);
+```
+
+Mengapa perlu pembersihan 2 kali? Hal ini berhubungan dengan konteks interaksi frontend dan backend.
+Frontend sebagaimana namanya, bagian ini berinteraksi langsung dengan pengguna pada UI dan hal lainnya, sementara backend bekerja di latas belakang tanpa adanya interaksi dengan pengguna.
+
+Faktor utamanya ialah keamanan, pengguna dapat mengubah kode JavaScript di frontend, yang berarti mereka dapat melewati atau menonaktifkan pembersihan data. Dengan pembersihan di backend, hal ini memastikan bahwa semua data yang masuk ke sistem telah diperiksa dan diolah dengan benar.
+Faktor lainnya ialah konsistensi, pada backend, data yang masuk dari sumber manapun akan selalu tersaring dan dibersihkan dengan cara yang sama darimanapun asal datanya.
+Berhubungan dengan konsistensi juga backend juga cenderung lebih mudah dimodifikasi mengingat perubahan akan banyak terjadi pada sisi frontend sehingga mempermudah developer.
+
+
+<h2>Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!</h2>
+
+Pada tugas kali ini inisialisasi AJAX ialah tujuan utama, jadi saya menerapkan beberapa perubahan pada `att.html` yang memberikan fungsi asynchronus dalam operasinya.
+
+```bash
+    function hideModal() {
+    function showModal() {
+    async function refreshProductEntries() {
+    function addProductEntry() {
+    async function getProductEntries(){
+```
+
+berikut ialah beberapa fungsi yang diimplementasikan dalam penggunaan javascript disini.
+
+Pertama tama, saya menginisiasi error message pada views.py tepatnya padafungsi login
+
+`messages.error(request, "Invalid username or password. Please try again.")`
+
+Ini ialah bentuk error yang di return ketika ada form yang tidak valid
+
+Kemudian saya menambahakn fitur pada views.py di sini saya menggunakan `@csrf_exempt` dan `@require_post` agar django mengabaikan csrf dan hanya menerima request post
+
+```bash
+    @csrf_exempt
+    @require_POST
+    def create_ajax(request):
+        
+        name = strip_tags(request.POST.get("name"))
+        price = strip_tags(request.POST.get("price"))
+        stock = strip_tags(request.POST.get("stock"))
+        description = strip_tags(request.POST.get("description"))
+        category = strip_tags(request.POST.get("category"))
+        user = request.user
+        
+        new_item = ProductEntry(
+            name = name, price = price, stock = stock, description = description, category = category,
+            user=user
+        )
+        new_item.save()
+
+        return HttpResponse(b"CREATED", status=201)
+```
+
+berikut merupakan penerapannya, sebagaimana dijelaskan decorator `csrf_exempt` membuat django tidak men double check csrf.
+
+seperti biasa, kemudian saya juga memberikan direct url dari urls.py namanya
+
+`path('create-ajax', create_ajax, name='create_ajax')`
+
+Hal ini bertujuan agar url pattern terdeteksi oleh django.
+
+Setelah memberikan beberapa adjustment pada views.py (beberapa entry diedit dan difilted), saya mereplace for loop pada `att.html` menjadi div yang nantinya akan diintegrasikan dengan js.
+
+`async function getProductEntries(){` fungsi ini dibuat dan beberapa penyesuaian dibuat di sini.
+
+`async function refreshProcutEntries()` juga saya buat dan dikhususkan pada amodel yang memberikan fungsi refresh agar selalu asynchronous.
+
+Kemudian saya juga menambahkan beberapa adisi di templates atas, saya membuat model crud agar inputasi lebih mudah dilakukan pengguna.
+
+```bash
+<div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+    <div id="crudModalContent" class="relative bg-white rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between p-4 border-b rounded-t">
+        <h3 class="text-xl font-semibold text-gray-900">
+          Add New Product Entry
+        </h3>
+        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="px-6 py-4 space-y-6 form-style">
+    .....
+```
+
+Berikut potongan dari kodenya. 
+
+Kemudian dengan menggunakan fungsi javascript saya juga me link button yang telah di buat di `att.html` agar me redirect ke fungsi `showModal()`
+
+```bash
+const modal = document.getElementById('crudModal');
+  const modalContent = document.getElementById('crudModalContent');
+
+  function showModal() {
+      const modal = document.getElementById('crudModal');
+      const modalContent = document.getElementById('crudModalContent');
+
+      modal.classList.remove('hidden'); 
+      setTimeout(() => {
+        modalContent.classList.remove('opacity-0', 'scale-95');
+        modalContent.classList.add('opacity-100', 'scale-100');
+      }, 50); 
+  }
+
+  function hideModal() {
+      const modal = document.getElementById('crudModal');
+      const modalContent = document.getElementById('crudModalContent');
+
+      modalContent.classList.remove('opacity-100', 'scale-100');
+      modalContent.classList.add('opacity-0', 'scale-95');
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 150); 
+  }
+
+  document.getElementById("cancelButton").addEventListener("click", hideModal);
+  document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+```
+
+Terkahir saya memberikan addProductEntry untuk menambahkan produk dan men save langsung ke tampilan utama.
+
+```bash
+function addProductEntry() {
+    fetch("{% url 'main:create_ajax' %}", {
+      method: "POST",
+      body: new FormData(document.querySelector('#productEntryForm')),
+    })
+    .then(response => {
+        refreshProductEntries();
+        
+        setTimeout(() => {
+            hideModal();
+        }, 100); 
+    });
+
+    document.getElementById("productEntryForm").reset(); 
+    document.querySelector("[data-modal-toggle='crudModal']").click();
+
+    return false;
+  }
+```
+
+Disini saya meng set timeout agar form tertutup otomatis dan lebih fleksibel.
+
+
+Terakhir saya menambahkan fungsi keamanan yang memotong data yang sekiranya membahayakan website.
+Hal ini saya implementasikan menggunakan `strip_tags` dan `DOMPurify, kedua fungsi ini di import dan di implementasikan di att.html dan forms.py.
+
