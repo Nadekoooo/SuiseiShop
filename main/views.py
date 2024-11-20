@@ -14,6 +14,9 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.http import JsonResponse
 
 # Create your views here.
 @login_required(login_url='/login')
@@ -46,6 +49,7 @@ def show_xml(request):
 def show_json(request):
     data = ProductEntry.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
 
 def show_xml_by_id(request, id):
     data = ProductEntry.objects.filter(pk=id)
@@ -133,3 +137,30 @@ def create_ajax(request):
     new_item.save()
 
     return HttpResponse(b"CREATED", status=201)
+
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        new_product = ProductEntry.objects.create(
+            user=request.user,
+            name=data["name"],
+            price=int(data["price"]),
+            stock=int(data["stock"]),
+            description=data["description"],
+            category=data["category"],
+        )
+        new_product.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+    
+@login_required
+def user_products(request):
+    # Filter products by the authenticated user
+    items = ProductEntry.objects.filter(user=request.user)
+    
+    # Serialize the queryset to JSON
+    return JsonResponse(serializers.serialize('json', items), content_type="application/json", safe=False)
